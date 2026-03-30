@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends.build_meta"
+
+[project]
+name = "agentlog"
+version = "0.1.0"
+description = "Automatic compliance logging for AI agents. One line install, vendor-agnostic, audit-ready."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = []
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.optional-dependencies]
+supabase = ["supabase>=2.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/qlive-ai/agentlog"
+Documentation = "https://github.com/qlive-ai/agentlog#readme"
+Issues = "https://github.com/qlive-ai/agentlog/issues"
