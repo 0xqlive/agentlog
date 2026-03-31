@@ -13,7 +13,7 @@ class SupabaseBackend:
     The ``supabase`` package is imported lazily so the core SDK
     stays dependency-free. Install the extra with::
 
-        pip install agentlog[supabase]
+        pip install auditlog-ai[supabase]
     """
 
     def __init__(self, url: str, key: str) -> None:
@@ -29,7 +29,7 @@ class SupabaseBackend:
             except ImportError:
                 raise ImportError(
                     "The supabase package is required for SupabaseBackend. "
-                    "Install it with: pip install agentlog[supabase]"
+                    "Install it with: pip install auditlog-ai[supabase]"
                 )
             self._client = create_client(self.url, self.key)
         return self._client

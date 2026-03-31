@@ -26,7 +26,7 @@ twine upload dist/*
 Vérifier que ça marche :
 
 ```bash
-pip install agentlog
+pip install auditlog-ai
 python -c "from agentlog import log_agent; print('OK')"
 ```
 
@@ -49,7 +49,7 @@ gh repo create agentlog --public \
   --source=. --push
 
 # Ou manuellement : créer le repo sur github.com puis :
-git remote add origin git@github.com:qlive-ai/agentlog.git
+git remote add origin git@github.com:0xqlive/agentlog.git
 git branch -M main
 git push -u origin main
 ```
@@ -59,7 +59,7 @@ git push -u origin main
 Aller sur https://news.ycombinator.com/submit
 
 - Title : `Show HN: AgentLog – open source audit trail for AI agents`
-- URL : `https://github.com/qlive-ai/agentlog`
+- URL : `https://github.com/0xqlive/agentlog`
 - Laisser le champ text vide (HN ignore text si une URL est fournie)
 - Poster le contenu de SHOW_HN.md en premier commentaire juste après
 

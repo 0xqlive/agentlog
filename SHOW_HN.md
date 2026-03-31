@@ -2,7 +2,7 @@
 Show HN: AgentLog – open source audit trail for AI agents
 
 **URL:**
-https://github.com/qlive-ai/agentlog
+https://github.com/0xqlive/agentlog
 
 **Text:**
 
@@ -26,7 +26,7 @@ Core is MIT, zero dependencies, Python 3.9+. Optional Supabase backend if you wa
 
 I built this because I've been talking to companies deploying agents in production, and every single one has the same question: "how do we prove to an auditor what our agent did?" Nobody had a good answer.
 
-Code: https://github.com/qlive-ai/agentlog
-PyPI: `pip install agentlog`
+Code: https://github.com/0xqlive/agentlog
+PyPI: `pip install auditlog-ai`
 
-Happy to hear what's missing or what you'd want in v0.2.
+What would make you actually use this? What's the first thing you'd want in v0.2?

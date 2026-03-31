@@ -2,14 +2,12 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-<!-- Uncomment after PyPI publish:
-[![PyPI](https://img.shields.io/pypi/v/agentlog.svg)](https://pypi.org/project/agentlog/)
--->
+[![PyPI](https://img.shields.io/pypi/v/auditlog-ai.svg)](https://pypi.org/project/auditlog-ai/)
 
 Audit trail for AI agents. One decorator, zero dependencies.
 
 ```
-pip install agentlog
+pip install auditlog-ai
 ```
 
 ## The problem
@@ -83,7 +81,7 @@ logger = AgentLogger(agent_id="my-agent", model_id="gpt-4", backend=backend)
 ```
 
 ```
-pip install agentlog[supabase]
+pip install auditlog-ai[supabase]
 ```
 
 Writing your own backend is one method: `save(event: AgentEvent)`.

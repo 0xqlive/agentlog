@@ -1,9 +1,9 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends.build_meta"
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "agentlog"
+name = "auditlog-ai"
 version = "0.1.0"
 description = "Automatic compliance logging for AI agents. One line install, vendor-agnostic, audit-ready."
 readme = "README.md"
@@ -26,6 +26,6 @@ classifiers = [
 supabase = ["supabase>=2.0.0"]
 
 [project.urls]
-Homepage = "https://github.com/qlive-ai/agentlog"
-Documentation = "https://github.com/qlive-ai/agentlog#readme"
-Issues = "https://github.com/qlive-ai/agentlog/issues"
+Homepage = "https://github.com/0xqlive/agentlog"
+Documentation = "https://github.com/0xqlive/agentlog#readme"
+Issues = "https://github.com/0xqlive/agentlog/issues"
