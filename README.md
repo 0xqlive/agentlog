@@ -67,21 +67,51 @@ logger.log(input_text="Hello", output_text="Hi there")
 }
 ```
 
-Inputs and outputs are SHA-256 hashed. The actual content never touches the log unless you put it in `metadata`.
+Inputs and outputs are SHA-256 hashed. The actual content never touches the log unless you opt in with `store_raw=True`.
+
+## v0.2 — Async, PostgreSQL, raw storage
+
+**Async support** — for async agents:
+
+```python
+from agentlog import alog_agent
+
+@alog_agent(agent_id="async-bot", model_id="claude-3")
+async def answer(prompt: str) -> str:
+    return await call_my_model(prompt)
+```
+
+```
+pip install auditlog-ai[async]
+```
+
+**Store raw content** — when you need the full text, not just hashes:
+
+```python
+logger.log(input_text="Hello", output_text="Hi there", store_raw=True)
+# → input_raw and output_raw fields included in the event
+```
 
 ## Bring your own backend
 
-JSONL by default. Supabase if you want cloud:
+JSONL by default. Supabase, PostgreSQL, or build your own:
 
 ```python
-from agentlog import AgentLogger, SupabaseBackend
+from agentlog import AgentLogger, SupabaseBackend, PostgresBackend
 
+# Supabase
 backend = SupabaseBackend(url="https://xxx.supabase.co", key="your-key")
+
+# PostgreSQL
+backend = PostgresBackend(dsn="postgresql://user:pass@localhost/mydb")
+
 logger = AgentLogger(agent_id="my-agent", model_id="gpt-4", backend=backend)
 ```
 
 ```
 pip install auditlog-ai[supabase]
+pip install auditlog-ai[postgres]
+pip install auditlog-ai[all]        # everything
 ```
 
 Writing your own backend is one method: `save(event: AgentEvent)`.
@@ -89,9 +119,10 @@ Writing your own backend is one method: `save(event: AgentEvent)`.
 ## Design decisions
 
 - **Zero dependencies.** Core uses only the standard library. No vendor lock-in.
-- **Hashed by default.** Input/output never stored in plaintext unless you opt in.
+- **Hashed by default.** Input/output never stored in plaintext unless you opt in with `store_raw=True`.
 - **Append-only JSONL.** Grep it, stream it, pipe it. No database required.
 - **Vendor-agnostic.** Works with OpenAI, Anthropic, LangChain, your custom stack.
+- **Async-native.** Full async support for non-blocking agent pipelines.
 
 ## License
 

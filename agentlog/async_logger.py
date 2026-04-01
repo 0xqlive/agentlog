@@ -1,4 +1,4 @@
-"""AgentLogger — the main interface for recording agent actions."""
+"""AsyncAgentLogger — async interface for recording agent actions."""
 
 from __future__ import annotations
 
@@ -10,24 +10,25 @@ from agentlog.backends.local import LocalBackend
 from agentlog.schema import AgentEvent
 
 
-class AgentLogger:
-    """High-level logger that creates and persists AgentEvent records.
+class AsyncAgentLogger:
+    """Async version of AgentLogger for non-blocking event recording.
 
-    Can be used directly via :meth:`log`, or as a context manager
+    Provides the same API as AgentLogger but with async methods.
+    Can be used directly via :meth:`log`, or as an async context manager
     for automatic timing and logging on exit.
 
     Examples
     --------
     Direct call::
 
-        logger = AgentLogger(agent_id="my-agent", model_id="gpt-4")
-        event = logger.log(input_text="Hello", output_text="Hi there")
+        logger = AsyncAgentLogger(agent_id="my-agent", model_id="gpt-4")
+        event = await logger.log(input_text="Hello", output_text="Hi there")
 
     Context manager::
 
-        with AgentLogger(agent_id="my-agent", model_id="gpt-4") as logger:
-            result = call_model(prompt)
-            logger.set_output(result)
+        async with AsyncAgentLogger(agent_id="my-agent", model_id="gpt-4") as logger:
+            result = await call_model(prompt)
+            await logger.set_output(result)
     """
 
     def __init__(
@@ -51,63 +52,47 @@ class AgentLogger:
     # Core API
     # ------------------------------------------------------------------
 
-    def log(
+    async def log(
         self,
         input_text: str,
         output_text: str,
-        store_raw: bool = False,
         **kwargs: Any,
     ) -> AgentEvent:
-        """Create an event from raw strings, persist it, and return it.
-
-        Parameters
-        ----------
-        input_text : str
-            Raw input text to log.
-        output_text : str
-            Raw output text to log.
-        store_raw : bool, optional
-            If True, store the raw input and output text in the event.
-            Default is False to maintain privacy.
-        **kwargs : Any
-            Additional event attributes.
-
-        Returns
-        -------
-        AgentEvent
-            The persisted event.
-        """
+        """Create an event from raw strings, persist it asynchronously, and return it."""
         event = AgentEvent.from_call(
             agent_id=self.agent_id,
             session_id=self.session_id,
             input_text=input_text,
             output_text=output_text,
             model_id=self.model_id,
-            store_raw=store_raw,
             **kwargs,
         )
-        self.backend.save(event)
+        # Dispatch to backend's async save if available, otherwise fall back to sync
+        if hasattr(self.backend, "async_save"):
+            await self.backend.async_save(event)
+        else:
+            self.backend.save(event)
         return event
 
     # ------------------------------------------------------------------
     # Context manager
     # ------------------------------------------------------------------
 
-    def set_output(self, output_text: str) -> None:
-        """Store the output so it is logged automatically on ``__exit__``."""
+    async def set_output(self, output_text: str) -> None:
+        """Store the output so it is logged automatically on ``__aexit__``."""
         self._output_text = output_text
 
-    def __enter__(self) -> AgentLogger:
+    async def __aenter__(self) -> AsyncAgentLogger:
         self._start_time = time.monotonic()
         self._output_text = None
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         if self._output_text is not None:
             latency_ms = None
             if self._start_time is not None:
                 latency_ms = int((time.monotonic() - self._start_time) * 1000)
-            self.log(
+            await self.log(
                 input_text=self._input_text or "",
                 output_text=self._output_text,
                 latency_ms=latency_ms,

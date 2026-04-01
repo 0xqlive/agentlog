@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auditlog-ai"
-version = "0.1.0"
+version = "0.2.0"
 description = "Automatic compliance logging for AI agents. One line install, vendor-agnostic, audit-ready."
 readme = "README.md"
 license = { text = "MIT" }
@@ -24,6 +24,13 @@ classifiers = [
 
 [project.optional-dependencies]
 supabase = ["supabase>=2.0.0"]
+postgres = ["psycopg2-binary>=2.9.0"]
+async = ["aiofiles>=23.0.0"]
+all = [
+    "supabase>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "aiofiles>=23.0.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/0xqlive/agentlog"

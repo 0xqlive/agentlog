@@ -39,6 +39,8 @@ class AgentEvent:
     policy_id: Optional[str] = None
     latency_ms: Optional[int] = None
     metadata: Optional[Dict[str, Any]] = None
+    input_raw: Optional[str] = None
+    output_raw: Optional[str] = None
 
     # ------------------------------------------------------------------
     # Factory
@@ -52,15 +54,45 @@ class AgentEvent:
         input_text: str,
         output_text: str,
         model_id: str,
+        store_raw: bool = False,
         **kwargs: Any,
     ) -> AgentEvent:
         """Build an event from raw input/output strings.
 
         Text is hashed with SHA-256 so the log stays lightweight
         and avoids storing potentially sensitive payloads.
+
+        Parameters
+        ----------
+        agent_id : str
+            Identifier for the agent.
+        session_id : str
+            Identifier for the session.
+        input_text : str
+            Raw input text.
+        output_text : str
+            Raw output text.
+        model_id : str
+            Identifier for the model used.
+        store_raw : bool, optional
+            If True, store the raw input and output text in the event.
+            Default is False to maintain privacy.
+        **kwargs : Any
+            Additional fields to include in the event.
+
+        Returns
+        -------
+        AgentEvent
+            The constructed event.
         """
         input_hash = hashlib.sha256(input_text.encode("utf-8")).hexdigest()
         output_hash = hashlib.sha256(output_text.encode("utf-8")).hexdigest()
+
+        # Optionally store raw content
+        if store_raw:
+            kwargs["input_raw"] = input_text
+            kwargs["output_raw"] = output_text
+
         return cls(
             agent_id=agent_id,
             session_id=session_id,
